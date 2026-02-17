@@ -3,6 +3,14 @@ import json
 import os
 import numpy as np
 
+# CORS configuration
+CORS_HEADERS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Expose-Headers": "Access-Control-Allow-Origin",
+}
+
 # Load telemetry data
 def load_data():
     data_path = os.path.join(os.path.dirname(__file__), "q-vercel-latency.json")
@@ -12,10 +20,8 @@ def load_data():
 class handler(BaseHTTPRequestHandler):
     def _set_cors_headers(self):
         """Set CORS headers for all responses"""
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', '*')
-        self.send_header('Access-Control-Max-Age', '86400')
+        for header, value in CORS_HEADERS.items():
+            self.send_header(header, value)
     
     def do_OPTIONS(self):
         """Handle preflight CORS requests"""
