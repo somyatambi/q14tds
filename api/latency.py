@@ -26,8 +26,10 @@ class handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         """Handle preflight CORS requests"""
         self.send_response(200)
+        self.send_header('Content-Type', 'text/plain')
         self._set_cors_headers()
         self.end_headers()
+        self.wfile.write(b'')
     
     def do_POST(self):
         """Handle POST requests"""
@@ -78,15 +80,15 @@ class handler(BaseHTTPRequestHandler):
             # Send successful response with CORS headers
             response = {"regions": results}
             self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
             self._set_cors_headers()
+            self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(response).encode())
             
         except Exception as e:
             # Send error response with CORS headers
             self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
             self._set_cors_headers()
+            self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({"error": str(e)}).encode())
