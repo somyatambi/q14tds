@@ -76,11 +76,12 @@ class handler(BaseHTTPRequestHandler):
                 }
             
             # Send successful response with CORS headers
+            response = {"regions": results}
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self._set_cors_headers()
             self.end_headers()
-            self.wfile.write(json.dumps(results).encode())
+            self.wfile.write(json.dumps(response).encode())
             
         except Exception as e:
             # Send error response with CORS headers
